@@ -35,6 +35,22 @@ main:
   ldr r1, [sp, #4]
   bl printf
 
+  /* add operation */
+  ldr r0, [sp]
+  ldr r1, [sp, #4]
+  bl intadd
+  mov r1, r0
+  ldr r0, printdata+20
+  bl printf
+
+  /* subtact operation */
+  ldr r0, [sp]
+  ldr r1, [sp, #4]
+  bl intsub
+  mov r1, r0
+  ldr r0, printdata+20
+  bl printf
+  
   mov r0, #0 /* set return value to 0 */
   add sp, sp, #8 /* restore stack */
   ldr pc, [sp], #4 /* load pc with lr */
