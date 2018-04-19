@@ -44,7 +44,10 @@ update:
   mov r3, r3, asr #1
 
   /* decrement counter */
-  sub r5, r5, #1
+  mov r0, r5
+  mov r1, #1
+  bl intsub
+  mov r5, r0
 
   /* check if counter is zero */
   cmp r5, #0
