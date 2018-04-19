@@ -4,81 +4,71 @@
 .global main
 
 main:
-  str lr, [sp, #-4]! /* store lr on stack */
-  sub sp, sp, #8 /* make space for number 1 */
+  /* store lr on stack */
+  str lr, [sp, #-4]!
 
-  /* print "Enter Number 1: " */
-  ldr r0, printdata
+  /* make space for inputs (2 x 4 bytes) */
+  sub sp, sp, #8
+
+  /* print prompt for number 1 */
+  ldr r0, =prompt1
   bl  printf
 
   /* read number 1 */
-  ldr r0, printdata+12
+  ldr r0, =readint
   mov r1, sp
   bl scanf
 
-  /* print "Enter Number 2: " */
-  ldr r0, printdata+4
+  /* print prompt for number 2 */
+  ldr r0, =prompt2
   bl  printf
 
   /* read number 2 */
-  ldr r0, printdata+12
+  ldr r0, =readint 
   add r1, sp, #4
   bl scanf
-
-  /* print number 1 */
-  ldr r0, printdata+20
-  ldr r1, [sp]
-  bl printf
-
-  /* print number 2 */
-  ldr r0, printdata+20
-  ldr r1, [sp, #4]
-  bl printf
 
   /* add operation */
   ldr r0, [sp]
   ldr r1, [sp, #4]
   bl intadd
   mov r1, r0
-  ldr r0, printdata+20
+  ldr r0, =result
   bl printf
 
   /* subtact operation */
+  /* commenting this one out for now
   ldr r0, [sp]
   ldr r1, [sp, #4]
   bl intsub
   mov r1, r0
-  ldr r0, printdata+20
+  ldr r0, =result
   bl printf
+  */
   
-  mov r0, #0 /* set return value to 0 */
-  add sp, sp, #8 /* restore stack */
-  ldr pc, [sp], #4 /* load pc with lr */
+  /* set return value to 0 */
+  mov r0, #0
+
+  /* restore stack */
+  add sp, sp, #8
+
+  /* load pc with lr */
+  ldr pc, [sp], #4
 end:
 
-printdata:
-  .word string0
-  .word string1
-  .word string2
-  .word string3
-  .word string4
-  .word string5
-  .word string6
-  .word string7
-
-string0:
+prompt1:
   .asciz "Enter Number 1: "
-string1:
+prompt2:
   .asciz "Enter Number 2: "
-string2:
+prompt3:
   .asciz "Enter Operation: "
-string3:
+readint:
   .asciz "%d"
-string4:
+readchar:
   .asciz "%c"
-string5:
+result:
   .asciz "Result is: %d\n"
-string6:
+again:
   .asciz "Again? "
-string7:
+invalid:
   .asciz "Invalid Operation Entered.\n"
