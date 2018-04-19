@@ -8,7 +8,10 @@ main:
   str lr, [sp, #-4]!
 
   /* make space for inputs */
-  sub sp, sp, #16
+  mov r0, sp
+  mov r1, #16
+  bl intsub
+  mov sp, r0
 
 loop:
   /* print prompt for number 1 */
@@ -25,8 +28,11 @@ loop:
   bl  printf
 
   /* read number 2 */
+  mov r0, sp
+  mov r1, #4
+  bl intadd
+  mov r1, r0
   ldr r0, =readint 
-  add r1, sp, #4
   bl scanf
 
   /* print prompt for operation */
@@ -34,8 +40,11 @@ loop:
   bl printf 
 
   /* read operation */
+  mov r0, sp
+  mov r1, #8
+  bl intadd
+  mov r1, r0
   ldr r0, =readchar
-  add r1, sp, #8
   bl scanf
   ldrb r2, [sp, #8]
 
@@ -88,8 +97,11 @@ printagain:
   bl printf
 
   /* read char */
+  mov r0, sp
+  mov r1, #12
+  bl intadd
+  mov r1, r0
   ldr r0, =readchar
-  add r1, sp, #12
   bl scanf
 
   /* put 'y' in r1 */
@@ -103,11 +115,15 @@ printagain:
   cmp r0, r1
   beq loop
 
-  /* set return value to 0 */
-  mov r0, #0
 
   /* restore stack */
-  add sp, sp, #16
+  mov r0, sp
+  mov r1, #16
+  bl intadd
+  mov sp, r0
+
+  /* set return value to 0 */
+  mov r0, #0
 
   /* load pc with lr */
   ldr pc, [sp], #4
