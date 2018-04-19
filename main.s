@@ -67,9 +67,8 @@ loop:
 
   /* handle multiplication operation */
   cmp r2, r3
-  bne printinvalid
-  bl intmul
-  b printresult
+  bleq intmul
+  beq printresult
   
   /* handle invalid operation */
 printinvalid:
