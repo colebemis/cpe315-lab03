@@ -29,24 +29,61 @@ loop:
   add r1, sp, #4
   bl scanf
 
-  /* add operation */
+  /* print prompt for operation */
+  ldr r0, =prompt3
+  bl printf 
+
+  /* read operation */
+  ldr r0, =readchar
+  add r1, sp, #8
+  bl scanf
+  ldrb r2, [sp, #8]
+
+  /* load function arguments */
   ldr r0, [sp]
   ldr r1, [sp, #4]
-  bl intadd
+
+  /* load '+' into r3 */
+  ldr r3, =plus
+  ldrb r3, [r3]
+
+  /* handle addition operation */
+  cmp r2, r3
+  bleq intadd
+  beq printresult
+
+  /* load '-' into r3 */
+  ldr r3, =minus
+  ldrb r3, [r3]
+
+  /* handle subtraction operation */ 
+  cmp r2, r3
+  bleq intsub
+  beq printresult
+
+  /* load '*' into r3 */
+  ldr r3, =times
+  ldrb r3, [r3]
+
+  /* handle multiplication operation */
+  cmp r2, r3
+  bne printinvalid
+  bl intmul
+  b printresult
+  
+  /* handle invalid operation */
+printinvalid:
+  ldr r0, =invalid
+  bl printf
+  b printagain
+
+printresult:
+  /* print result */
   mov r1, r0
   ldr r0, =result
   bl printf
 
-  /* subtact operation */
-  /* commenting this one out for now
-  ldr r0, [sp]
-  ldr r1, [sp, #4]
-  bl intsub
-  mov r1, r0
-  ldr r0, =result
-  bl printf
-  */
-
+printagain:
   /* print again prompt */
   ldr r0, =again
   bl printf
@@ -95,3 +132,9 @@ invalid:
   .asciz "Invalid Operation Entered.\n"
 yes:
   .byte 'y'
+plus:
+  .byte '+'
+minus:
+  .byte '-'
+times:
+  .byte '*'

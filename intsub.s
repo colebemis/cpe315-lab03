@@ -1,6 +1,6 @@
 	.global intsub
 intsub:
-   push {r6, lr}	/* place local variable (carry) on stack */
+   push {r4, r5, r6, lr}	/* place local variable (carry) on stack */
    mov r4, r0		/* save operand 1 */
    mov r5, r1		/* save operand 2 */
 while:
@@ -13,5 +13,5 @@ while:
    b while 		/* unconditional branch to while statement */
 exit:
    mov r0, r4		/* copy result in r4 to return register */
-   pop {r6, pc}		/* deallocate stack */
+   pop {r4, r5, r6, pc}		/* deallocate stack */
 
